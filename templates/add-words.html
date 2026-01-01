@@ -1,0 +1,15 @@
+<div id="game">
+	<form hx-post="/word" hx-target="#messages" hx-on::after-request="if (event.detail.successful) this.reset()">
+		<label for="word-box">Enter a word</label>
+		<div class="row">
+			<input type="text" id="word-box" name="word">
+			<button hx-post="/word">Add to bowl</button>
+		</div>
+	</form>
+	<div id="messages"></div>
+	<div class=" spacer">
+	</div>
+	<button hx-get="/start-game" hx-target="#game" hx-swap="outerHTML">
+		Start game
+	</button>
+</div>

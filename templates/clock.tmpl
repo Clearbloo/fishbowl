@@ -1,0 +1,9 @@
+	<div id="round-clock"
+	     hx-get="/time"
+	     hx-trigger="every 30ms"
+	     hx-trigger="poll from:body, every 1s"
+	     hx-target="#round-clock"
+	     hx-swap="outerHTML"
+	>
+		⏳ {{ .time }}
+  </div>

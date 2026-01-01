@@ -1,0 +1,12 @@
+<div id="game">
+	<div id="round-clock" hx-get="/time" hx-trigger="poll from:body, every 30ms" hx-target="#round-clock"
+		hx-swap="outerHTML">
+		⏳ --
+	</div>
+	<div class="spacer"></div>
+	<button hx-get="/start-round" hx-swap="outerHTML" hx-on::after-request="htmx.trigger('#round-clock','poll')">Start
+		round</button>
+	<div id="turn-word" class="turn">
+		Waiting…
+	</div>
+</div>
