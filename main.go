@@ -7,16 +7,16 @@ import (
 	"net/http"
 	"time"
 
+	"fishbowl/game"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	// Create a Gin router with default middleware (logger and recovery)
 	r := gin.New()
-	logger := log.Default()
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/static", "./static")
-
 	r.Use(gin.Recovery())
 	// Don't log time
 	r.Use(gin.LoggerWithConfig(gin.LoggerConfig{
@@ -25,6 +25,9 @@ func main() {
 		},
 	}))
 
+	logger := log.Default()
+
+	game_state := gameState.new()
 	words := []string{}
 	started := false
 	round_started := false
@@ -35,8 +38,11 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.File("templates/index.html")
 	})
+	r.GET("/game", func(c *gin.Context) {
+		c.File("templates/game-page.html")
+	})
 
-	r.POST("/word", func(ctx *gin.Context) {
+	r.POST("/words", func(ctx *gin.Context) {
 		if started {
 			ctx.String(http.StatusLocked, "Game has already started")
 			return
@@ -47,8 +53,31 @@ func main() {
 		ctx.String(http.StatusOK, "added word "+word+"\n")
 	})
 
-	r.GET("/word", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, words)
+	r.GET("/words/count", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, len(words))
+	})
+
+	r.GET("/words/random", func(ctx *gin.Context) {
+		if !started || !round_started {
+			ctx.HTML(http.StatusOK, "word.tmpl", gin.H{"word": "Finished!"})
+			return
+		}
+
+		i := rand.Intn(len(round))
+		pick := round[i]
+
+		if i == len(round) {
+			round = round[:i]
+		} else {
+			round = append(round[:i], round[i+1:]...)
+		}
+
+		if len(round) == 0 {
+			round_started = false
+			ctx.HTML(http.StatusOK, "word.tmpl", gin.H{"word": "Finished!"})
+		} else {
+			ctx.HTML(http.StatusOK, "word.tmpl", gin.H{"word": pick})
+		}
 	})
 
 	r.GET("/time", func(ctx *gin.Context) {
@@ -66,7 +95,8 @@ func main() {
 
 	r.GET("/start-game", func(ctx *gin.Context) {
 		started = true
-		ctx.HTML(http.StatusOK, "game-page.html", gin.H{})
+		ctx.Redirect(http.StatusPermanentRedirect, "game-page.html")
+		// ctx.HTML(http.StatusOK, "game-page.html", gin.H{})
 	})
 
 	r.GET("/start-round", func(ctx *gin.Context) {
@@ -79,35 +109,6 @@ func main() {
 		round_started = true
 		round = words
 		ctx.HTML(http.StatusOK, "draw-word.html", gin.H{})
-	})
-
-	r.GET("/turn", func(ctx *gin.Context) {
-		if !started {
-			ctx.String(http.StatusTooEarly, "Game has not started")
-			return
-		}
-		if !round_started {
-			ctx.String(http.StatusTooEarly, "Round has not started")
-			return
-		}
-
-		i := rand.Intn(len(round))
-
-		logger.Print("Round: ", round)
-		logger.Print("selection: ", i)
-
-		pick := round[i]
-
-		if i == len(round) {
-			round = round[:i]
-		} else {
-			round = append(round[:i], round[i+1:]...)
-		}
-
-		if len(round) == 0 {
-			round_started = false
-		}
-		ctx.String(http.StatusOK, pick)
 	})
 
 	r.GET("/restart", func(ctx *gin.Context) {
