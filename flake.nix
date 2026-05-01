@@ -4,7 +4,7 @@
     nixpkgs.url = "nixpkgs/nixos-25.11";
     utils.url = "github:numtide/flake-utils";
   };
-  outputs = { nixpkgs, utils, ... }:
+  outputs = { self, nixpkgs, utils, ... }:
     utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -28,15 +28,24 @@
               "cmdline-tools"
             ];
         };
+        lastModifiedDate =
+          self.lastModifiedDate or self.lastModified or "19700101";
+        version = builtins.substring 0 1 lastModifiedDate;
+        pname = "hello";
       in {
+        defaultPackage = pkgs.buildGoModule {
+          inherit pname version;
+          src = ./.;
+          vendorHash = pkgs.lib.fakeHash;
+        };
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             go
             gopls
-            go-tools # Static linting
-            gotools # More tools like call graphs
-            # gomobile
-            # vscode
+            gotools
+            go-tools
+            gomobile
+            vscode
           ];
         };
       });

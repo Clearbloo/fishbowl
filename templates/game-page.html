@@ -1,35 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
-	<head>
-		<meta charset="UTF-8">
-		<title>Fishbowl Game</title>
-
-		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
-		<link rel="stylesheet" href="/static/style.css">
-	</head>
-
-	<body>
-
-		<div class="card">
-			<div class="header">
-				<h1>Play Fishbowl</h1>
-				<form action="/">
-					<button type="submit">↻ Restart</button>
-				</form>
-			</div>
-			<div id="game">
-				<div id="round-clock" hx-get="/time" hx-trigger="poll from:body, every 30ms" hx-target="#round-clock" hx-swap="outerHTML">
-					⏳ --
-				</div>
-				<div class="spacer"></div>
-				<button hx-get="/start-round" hx-swap="outerHTML" hx-on::after-request="htmx.trigger('#round-clock','poll')">
-					Start round
-				</button>
-				<div id="turn-word" class="turn">
-					Waiting…
-				</div>
-			</div>
-		</div>
-	</body>
-</html>
+<div id="game">
+	<div id="round-clock" hx-get="/time" hx-trigger="poll from:body, every 30ms" hx-target="#round-clock"
+		hx-swap="outerHTML">
+		⏳ --
+	</div>
+	<div class="spacer"></div>
+	<button hx-get="/start-round" hx-swap="outerHTML" hx-on::after-request="htmx.trigger('#round-clock','poll')">Start
+		round</button>
+	<div id="turn-word" class="turn">
+		Waiting…
+	</div>
+</div>
