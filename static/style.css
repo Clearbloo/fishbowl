@@ -6,6 +6,7 @@
 	--text: #e5e7eb;
 	--muted: #9ca3af;
 	--success: #34d399;
+	--danger: #f87171;
 }
 
 * {
@@ -40,18 +41,29 @@ body {
 	animation: fadeUp 600ms ease-out;
 }
 
+/* ── Clock ── */
+
 #round-clock {
 	text-align: center;
-	font-size: 1.25rem;
+	font-size: 1.1rem;
 	font-weight: 600;
 	color: var(--accent);
-	margin-bottom: 1rem;
+	margin-bottom: 0.75rem;
+	min-height: 1.5rem;
 }
+
+.clock-stopped {
+	color: #fde68a;
+	animation: flash 1s ease-in-out infinite;
+}
+
+/* ── Layout ── */
 
 .row {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
+	flex-wrap: wrap;
 }
 
 .row input {
@@ -61,6 +73,18 @@ body {
 .row button {
 	margin-top: 0;
 }
+
+.spacer {
+	height: 1.5rem;
+}
+
+.label {
+	color: var(--muted);
+	font-size: 0.85rem;
+	margin: 0.5rem 0 0.25rem;
+}
+
+/* ── Typography ── */
 
 h1 {
 	margin-top: 0;
@@ -72,12 +96,23 @@ h1 {
 	-webkit-text-fill-color: transparent;
 }
 
+h2 {
+	margin-top: 0;
+	font-size: 1.5rem;
+}
+
+h3 {
+	margin: 0.25rem 0 0.5rem;
+}
+
 label {
 	display: block;
 	margin-bottom: 0.25rem;
 	color: var(--muted);
 	font-size: 0.9rem;
 }
+
+/* ── Inputs ── */
 
 input[type="text"] {
 	width: 100%;
@@ -96,6 +131,8 @@ input[type="text"]:focus {
 	border-color: var(--accent);
 	box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
 }
+
+/* ── Buttons ── */
 
 button {
 	margin-top: 1rem;
@@ -125,15 +162,27 @@ button:active {
 	box-shadow: none;
 }
 
-.row {
+.button-row {
 	display: flex;
 	gap: 0.75rem;
-	flex-wrap: wrap;
+	margin-top: 1.25rem;
 }
 
-.spacer {
-	height: 1.5rem;
+.button-row button {
+	margin-top: 0;
+	flex: 1;
 }
+
+.btn-skip {
+	background: linear-gradient(135deg, #374151, #1f2937);
+	color: var(--muted);
+}
+
+.btn-skip:hover {
+	color: var(--text);
+}
+
+/* ── Word display ── */
 
 .turn {
 	margin-top: 1.5rem;
@@ -147,16 +196,203 @@ button:active {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 1.1rem;
-	font-weight: 500;
+	font-size: 1.4rem;
+	font-weight: 600;
 	text-align: center;
 	animation: pulseSoft 3s ease-in-out infinite;
 }
 
-/* htmx animation hook */
 #turn-word.htmx-settling {
 	animation: popIn 300ms ease-out;
 }
+
+/* ── Player list ── */
+
+.player-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	margin-top: 0.25rem;
+}
+
+.player-item {
+	background: rgba(139, 250, 202, 0.1);
+	border: 1px solid rgba(139, 250, 202, 0.25);
+	color: var(--accent-2);
+	padding: 0.2rem 0.65rem;
+	border-radius: 999px;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+/* ── Messages ── */
+
+.messages {
+	font-size: 0.85rem;
+	color: var(--muted);
+	margin-top: 0.4rem;
+}
+
+.messages > * {
+	padding: 0.15rem 0;
+}
+
+/* ── Phase info ── */
+
+.phase-info {
+	margin-bottom: 1rem;
+}
+
+.phase-badge {
+	display: inline-block;
+	background: linear-gradient(135deg, var(--accent), var(--accent-2));
+	color: #020617;
+	font-size: 0.8rem;
+	font-weight: 700;
+	padding: 0.2rem 0.75rem;
+	border-radius: 999px;
+	letter-spacing: 0.03em;
+}
+
+.phase-rules {
+	margin: 0.6rem 0 0;
+	color: var(--muted);
+	font-size: 0.9rem;
+}
+
+.turn-indicator {
+	margin: 0 0 0.5rem;
+	color: var(--text);
+}
+
+/* ── Guesser view ── */
+
+.guessing {
+	margin-top: 1.5rem;
+	padding: 1.5rem;
+	border-radius: 14px;
+	background: linear-gradient(180deg,
+			rgba(56, 189, 248, 0.06),
+			rgba(167, 139, 250, 0.04));
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	text-align: center;
+}
+
+.guessing-label {
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin: 0 0 0.4rem;
+	background: linear-gradient(90deg, var(--accent), var(--accent-2));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.guessing-name {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.95rem;
+}
+
+/* ── Round summary ── */
+
+.summary {
+	padding: 0.5rem 0;
+}
+
+.summary h2 {
+	margin-bottom: 0.25rem;
+}
+
+.summary-score {
+	margin: 0 0 1rem;
+	color: var(--muted);
+}
+
+.phase-complete-badge {
+	display: inline-block;
+	background: rgba(52, 211, 153, 0.12);
+	border: 1px solid rgba(52, 211, 153, 0.3);
+	color: var(--success);
+	font-size: 0.8rem;
+	padding: 0.2rem 0.75rem;
+	border-radius: 999px;
+	margin-bottom: 0.75rem;
+}
+
+.scoreboard {
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	border-radius: 12px;
+	overflow: hidden;
+	margin-bottom: 0.5rem;
+}
+
+.score-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.6rem 1rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.score-row:last-child {
+	border-bottom: none;
+}
+
+.player-name {
+	font-weight: 500;
+}
+
+.player-score {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--accent);
+}
+
+/* ── Phase transition ── */
+
+.phase-transition {
+	padding: 0.5rem 0;
+	text-align: center;
+}
+
+.phase-transition h2 {
+	font-size: 2rem;
+	background: linear-gradient(90deg, var(--accent), var(--accent-2));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-bottom: 0.25rem;
+}
+
+.phase-name {
+	color: var(--text);
+	font-size: 1.1rem;
+	margin: 0 0 0.5rem;
+}
+
+/* ── Game over ── */
+
+.game-over {
+	padding: 0.5rem 0;
+	text-align: center;
+}
+
+.game-over h2 {
+	font-size: 2rem;
+	background: linear-gradient(90deg, var(--accent), var(--accent-2));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-bottom: 0.25rem;
+}
+
+.winner {
+	font-size: 1.3rem;
+	font-weight: 700;
+	color: var(--accent-2);
+	margin: 0 0 1rem;
+}
+
+/* ── Animations ── */
 
 @keyframes fadeUp {
 	from {
@@ -194,30 +430,14 @@ button:active {
 	}
 }
 
-#clock-stopped {
-	text-align: center;
-	font-size: 1.4rem;
-	font-weight: 700;
-	padding: 0.75rem 1rem;
-	border-radius: 12px;
-	background: linear-gradient(135deg,
-			rgba(248, 113, 113, 0.15),
-			rgba(251, 191, 36, 0.15));
-	border: 1px solid rgba(251, 191, 36, 0.4);
-	color: #fde68a;
-	animation: flash 1s ease-in-out infinite;
-}
-
 @keyframes flash {
 
 	0%,
 	100% {
-		box-shadow: 0 0 0 rgba(251, 191, 36, 0);
-		transform: scale(1);
+		opacity: 1;
 	}
 
 	50% {
-		box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
-		transform: scale(1.03);
+		opacity: 0.5;
 	}
 }

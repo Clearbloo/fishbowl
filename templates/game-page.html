@@ -1,12 +1,6 @@
-<div id="game">
-	<div id="round-clock" hx-get="/time" hx-trigger="poll from:body, every 30ms" hx-target="#round-clock"
-		hx-swap="outerHTML">
-		⏳ --
-	</div>
-	<div class="spacer"></div>
-	<button hx-get="/start-round" hx-swap="outerHTML" hx-on::after-request="htmx.trigger('#round-clock','poll')">Start
-		round</button>
-	<div id="turn-word" class="turn">
-		Waiting…
-	</div>
+<div class="phase-info">
+	<span class="phase-badge">{{ .phaseName }}</span>
+	<p class="phase-rules">{{ .phaseRules }}</p>
 </div>
+<p class="turn-indicator">It's <strong>{{ .activeName }}</strong>'s turn to describe</p>
+<button hx-get="/start-round" hx-target="#game" hx-swap="innerHTML">Start round</button>

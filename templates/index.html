@@ -3,19 +3,27 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Fishbowl Game</title>
 
 	<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/htmx-ext-sse@2.2.2/sse.js"></script>
 	<link rel="stylesheet" href="/static/style.css">
 </head>
 
-<body>
+<body hx-ext="sse" sse-connect="/events">
 	<div class="card">
 		<div class="row">
-			<h1>Play Fishbowl</h1>
-			<button hx-get="/restart" hx-swap="outerHTML" hx-target="#game" hx-trigger="load, click">Restart</button>
+			<h1>Fishbowl</h1>
+			<button hx-get="/restart" hx-target="#game" hx-swap="innerHTML">Restart</button>
 		</div>
-		<div id="game"></div>
+		<div id="round-clock" sse-swap="clock"></div>
+		<div id="game"
+		     sse-swap="game"
+		     hx-get="/setup"
+		     hx-trigger="load"
+		     hx-swap="innerHTML">
+		</div>
 	</div>
 </body>
 

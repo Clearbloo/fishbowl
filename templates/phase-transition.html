@@ -1,0 +1,7 @@
+<div class="phase-transition">
+	<h2>Phase {{ .phaseNumber }}!</h2>
+	<h3 class="phase-name">{{ .phaseName }}</h3>
+	<p class="phase-rules">{{ .phaseRules }}</p>
+	<p class="turn-indicator"><strong>{{ .activeName }}</strong> goes first</p>
+	<button hx-get="/start-round" hx-target="#game" hx-swap="innerHTML">Let's go!</button>
+</div>

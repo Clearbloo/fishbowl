@@ -1,0 +1,16 @@
+<div class="summary">
+	<h2>⏰ Time's up!</h2>
+	<p class="summary-score"><strong>{{ .activeName }}</strong> guessed <strong>{{ .scored }}</strong> word{{ if ne .scored 1 }}s{{ end }}</p>
+	{{ if .phaseComplete }}
+	<p class="phase-complete-badge">All words guessed this phase!</p>
+	{{ end }}
+	<div class="scoreboard">
+		{{ range .players }}
+		<div class="score-row">
+			<span class="player-name">{{ .Name }}</span>
+			<span class="player-score">{{ .Score }}</span>
+		</div>
+		{{ end }}
+	</div>
+	<button hx-get="/next-turn" hx-target="#game" hx-swap="innerHTML">Next turn →</button>
+</div>

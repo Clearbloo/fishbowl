@@ -1,15 +1,26 @@
-<div id="game">
-	<form hx-post="/word" hx-target="#messages" hx-on::after-request="if (event.detail.successful) this.reset()">
-		<label for="word-box">Enter a word</label>
-		<div class="row">
-			<input type="text" id="word-box" name="word">
-			<button hx-post="/word">Add to bowl</button>
-		</div>
-	</form>
-	<div id="messages"></div>
-	<div class=" spacer">
+<form hx-post="/player" hx-target="#player-list" hx-swap="innerHTML"
+      hx-on::after-request="if (event.detail.successful) this.reset()">
+	<label for="name-box">Your name</label>
+	<div class="row">
+		<input type="text" id="name-box" name="name" placeholder="Enter your name" autocomplete="off">
+		<button>Join game</button>
 	</div>
-	<button hx-get="/start-game" hx-target="#game" hx-swap="outerHTML">
-		Start game
-	</button>
+</form>
+<div id="player-list"
+     sse-swap="players"
+     hx-get="/players"
+     hx-trigger="load"
+     hx-swap="innerHTML">
 </div>
+<div class="spacer"></div>
+<form hx-post="/word" hx-target="#messages" hx-swap="beforeend"
+      hx-on::after-request="if (event.detail.successful) this.reset()">
+	<label for="word-box">Add a word or phrase to the bowl</label>
+	<div class="row">
+		<input type="text" id="word-box" name="word" placeholder="Enter a word or phrase" autocomplete="off">
+		<button>Add to bowl</button>
+	</div>
+</form>
+<div id="messages" class="messages"></div>
+<div class="spacer"></div>
+<button hx-get="/start-game" hx-target="#game" hx-swap="innerHTML">Start game</button>

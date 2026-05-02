@@ -1,0 +1,5 @@
+<div id="turn-word" class="turn">{{ .word }}</div>
+<div class="button-row">
+	<button class="btn-score" hx-post="/score" hx-target="#game" hx-swap="innerHTML">Got it! ✓</button>
+	<button class="btn-skip" hx-get="/skip" hx-target="#turn-word" hx-swap="textContent">Skip →</button>
+</div>

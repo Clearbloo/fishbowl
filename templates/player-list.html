@@ -1,0 +1,8 @@
+{{ if .players }}
+<p class="label">Players joined:</p>
+<div class="player-list">
+	{{ range .players }}
+	<span class="player-item">{{ .Name }}</span>
+	{{ end }}
+</div>
+{{ end }}

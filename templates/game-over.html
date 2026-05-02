@@ -1,0 +1,13 @@
+<div class="game-over">
+	<h2>Game Over!</h2>
+	<p class="winner">{{ .winner }} wins!</p>
+	<div class="scoreboard">
+		{{ range .players }}
+		<div class="score-row">
+			<span class="player-name">{{ .Name }}</span>
+			<span class="player-score">{{ .Score }}</span>
+		</div>
+		{{ end }}
+	</div>
+	<button hx-get="/restart" hx-target="#game" hx-swap="innerHTML">Play Again</button>
+</div>
